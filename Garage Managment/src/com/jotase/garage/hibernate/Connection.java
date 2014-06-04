@@ -21,7 +21,7 @@ public class Connection {
 
     private Session session;
     private Transaction transaccion;
-    private SessionFactory factoria;
+    private SessionFactory sessionFactory;
     private static Connection _instance;
 
     /**
@@ -29,10 +29,12 @@ public class Connection {
      */
     private Connection() {
         try {
-            factoria = new AnnotationConfiguration().configure().buildSessionFactory();
+            System.out.println("connecting");
+            sessionFactory =new AnnotationConfiguration().configure().buildSessionFactory();
         } catch (HibernateException e) {
+            e.printStackTrace();
             System.out.println(e.getMessage());
-            transaccion.rollback();
+            //transaccion.rollback();
         }
     }
 
@@ -40,7 +42,7 @@ public class Connection {
      * @Method
      */
     private void begin() {
-        session = factoria.openSession();
+        session = sessionFactory.openSession();
         transaccion = session.beginTransaction();
     }
 

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 04-jun-2014 0:28:18 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.jotase.garage.POJO.Vehicle" table="vehicle" catalog="garage">
+        <id name="idVehicle" type="java.lang.Integer">
+            <column name="idVehicle" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="customer" class="com.jotase.garage.POJO.Customer" fetch="select">
+            <column name="customerId" />
+        </many-to-one>
+        <many-to-one name="vehicletype" class="com.jotase.garage.POJO.Vehicletype" fetch="select">
+            <column name="typeId" />
+        </many-to-one>
+        <property name="registrationNumber" type="string">
+            <column name="registrationNumber" length="50" unique="true" />
+        </property>
+        <property name="color" type="string">
+            <column name="color" length="50" />
+        </property>
+        <property name="model" type="string">
+            <column name="model" length="50" />
+        </property>
+        <property name="kmTraveled" type="java.lang.Double">
+            <column name="kmTraveled" precision="22" scale="0" />
+        </property>
+        <property name="constructionsYear" type="date">
+            <column name="constructionsYear" length="0" />
+        </property>
+        <property name="image" type="binary">
+            <column name="image" />
+        </property>
+        <property name="notes" type="string">
+            <column name="notes" length="50" />
+        </property>
+        <set name="interventions" inverse="true">
+            <key>
+                <column name="vehicleID" />
+            </key>
+            <one-to-many class="com.jotase.garage.POJO.Intervention" />
+        </set>
+    </class>
+</hibernate-mapping>

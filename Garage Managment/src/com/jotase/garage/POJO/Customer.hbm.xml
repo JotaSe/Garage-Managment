@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 04-jun-2014 0:28:18 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.jotase.garage.POJO.Customer" table="customer" catalog="garage">
+        <id name="idCostumer" type="java.lang.Integer">
+            <column name="idCostumer" />
+            <generator class="identity" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" length="50" />
+        </property>
+        <property name="lastName" type="string">
+            <column name="lastName" length="50" />
+        </property>
+        <property name="idNumber" type="string">
+            <column name="idNumber" length="50" />
+        </property>
+        <property name="address" type="string">
+            <column name="address" length="250" />
+        </property>
+        <property name="postalCode" type="string">
+            <column name="postalCode" length="10" />
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="50" />
+        </property>
+        <property name="phone" type="string">
+            <column name="phone" length="50" />
+        </property>
+        <property name="phone2" type="string">
+            <column name="phone2" length="50" />
+        </property>
+        <set name="vehicles" inverse="true">
+            <key>
+                <column name="customerId" />
+            </key>
+            <one-to-many class="com.jotase.garage.POJO.Vehicle" />
+        </set>
+    </class>
+</hibernate-mapping>

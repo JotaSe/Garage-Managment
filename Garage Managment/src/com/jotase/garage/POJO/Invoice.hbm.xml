@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 04-jun-2014 0:28:18 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.jotase.garage.POJO.Invoice" table="invoice" catalog="garage">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="intervention" class="com.jotase.garage.POJO.Intervention" fetch="select">
+            <column name="interventionId" />
+        </many-to-one>
+        <property name="date" type="timestamp">
+            <column name="date" length="19" />
+        </property>
+        <property name="notes" type="string">
+            <column name="notes" length="45" />
+        </property>
+    </class>
+</hibernate-mapping>

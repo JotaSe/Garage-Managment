@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
+<hibernate-reverse-engineering>
+  <schema-selection match-catalog="garage"/>
+  <table-filter match-name="customer"/>
+  <table-filter match-name="vehicletype"/>
+  <table-filter match-name="vehicle"/>
+  <table-filter match-name="intervention"/>
+  <table-filter match-name="intervention_has_products"/>
+  <table-filter match-name="invoice"/>
+  <table-filter match-name="product"/>
+</hibernate-reverse-engineering>

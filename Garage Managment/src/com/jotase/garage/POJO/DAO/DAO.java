@@ -36,6 +36,5 @@ public class DAO<T> {
     private String setWhere(String query) {
         query = (query != null) ? (" where " + query) : "";
         return query;
-
     }
 }

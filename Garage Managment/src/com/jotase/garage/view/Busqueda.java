@@ -4,7 +4,8 @@
  */
 package com.jotase.garage.view;
 
-import com.ventanas.controller.Controller;
+import com.jotase.garage.controller.ControllerSearch;
+
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -15,11 +16,8 @@ import javax.swing.JTextField;
  */
 public class Busqueda extends javax.swing.JDialog {
     private String PADRE = "";
-    private Controller controller;
+    public ControllerSearch controller;
 
-    public void setController(Controller controller) {
-        this.controller = controller;
-    }
 
     public String getPADRE() {
         return PADRE;
@@ -167,8 +165,6 @@ public class Busqueda extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton3ActionPerformed
     
     public JTable getjTable1() {
-        System.out.println("getTabla");
-        System.out.println(jTable1);
         return this.jTable1;
     }
 

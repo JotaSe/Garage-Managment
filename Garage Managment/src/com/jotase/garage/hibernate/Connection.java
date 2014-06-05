@@ -5,6 +5,7 @@
 package com.jotase.garage.hibernate;
 
 import java.util.List;
+import javax.swing.JOptionPane;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -57,9 +58,11 @@ public class Connection {
             session.saveOrUpdate(object);
             transaccion.commit();
         } catch (HibernateException e) {
+            JOptionPane.showMessageDialog(null, "Error :"+e.getMessage());
             System.out.println(e.getMessage());
             transaccion.rollback();
         } finally {
+            JOptionPane.showMessageDialog(null, "Transaction complete");
             end();
         }
 
@@ -72,9 +75,10 @@ public class Connection {
             session.delete(object);
             transaccion.commit();
         } catch (HibernateException e) {
-            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error :"+e.getMessage());
             transaccion.rollback();
         } finally {
+            JOptionPane.showMessageDialog(null, "Transaction complete");
             end();
         }
     }
@@ -87,9 +91,10 @@ public class Connection {
             list = query.list();
             transaccion.commit();
         } catch (HibernateException e) {
-            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error :"+e.getMessage());
             transaccion.rollback();
         } finally {
+            JOptionPane.showMessageDialog(null, "Transaction complete");
             end();
         }
         return list;
@@ -102,9 +107,10 @@ public class Connection {
             object = session.get(Object.class, _query);
             transaccion.commit();
         } catch (HibernateException e) {
-            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error :"+e.getMessage());
             transaccion.rollback();
         } finally {
+            JOptionPane.showMessageDialog(null, "Transaction complete");
             end();
         }
 

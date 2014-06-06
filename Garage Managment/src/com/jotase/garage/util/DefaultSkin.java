@@ -11,7 +11,7 @@ import org.pushingpixels.substance.api.watermark.SubstanceImageWatermark;
 import org.pushingpixels.substance.api.watermark.SubstanceWatermark;
  
 
- public class DefaultSkin  extends  SubstanceBusinessBlueSteelLookAndFeel
+ public class DefaultSkin  extends  BusinessBlackSteelSkin
  {
    SubstanceImageWatermark imageWatermark;
 
@@ -19,7 +19,7 @@ import org.pushingpixels.substance.api.watermark.SubstanceWatermark;
    public DefaultSkin()
    {
 
-       // SubstanceLookAndFeel.setSkin(this);
+       SubstanceLookAndFeel.setSkin(this);
        
      
    }

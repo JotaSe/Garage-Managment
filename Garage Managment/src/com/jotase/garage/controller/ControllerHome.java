@@ -4,12 +4,14 @@
  */
 package com.jotase.garage.controller;
 
+import com.jotase.garage.view.Home;
 import com.jotase.garage.view.View;
 import com.jotase.garage.view.ViewCustomer;
 import com.jotase.garage.view.ViewIntervention;
 import com.jotase.garage.view.ViewProducts;
 import com.jotase.garage.view.ViewVehicle;
 import javax.swing.JInternalFrame;
+import garage.managment.GarageManagment;
 
 /**
  *
@@ -23,10 +25,12 @@ public class ControllerHome {
     ViewVehicle viewVehicle;
 
     public void show(View view) {
+        JInternalFrame iframe = null;
         switch (view) {
             case Costumer:
-                viewCustomer = new ViewCustomer();
-                viewCustomer.setVisible(true);
+                System.out.println("show costumer");
+                iframe = new ViewCustomer();
+                //viewCustomer.setVisible(true);
                 break;
             case Intervention:
                 viewIntervention = new ViewIntervention();
@@ -42,5 +46,10 @@ public class ControllerHome {
 
 
         }
+        setVisible(iframe);
+    }
+    private void setVisible(JInternalFrame frame){
+        GarageManagment.home.getjDesktopPane1().add(frame);
+        frame.show();
     }
 }

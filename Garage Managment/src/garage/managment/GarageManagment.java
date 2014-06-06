@@ -8,10 +8,16 @@ import com.jotase.garage.POJO.Customer;
 import com.jotase.garage.POJO.Vehicle;
 import com.jotase.garage.hibernate.Connection;
 import com.jotase.garage.view.Home;
+import com.jtattoo.plaf.graphite.GraphiteLookAndFeel;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import org.pushingpixels.substance.api.skin.SubstanceBusinessBlueSteelLookAndFeel;
 
 /**
  *
@@ -23,34 +29,25 @@ public class GarageManagment {
      * @param args the command line arguments
      */
     public static Home home;
+    //Controller control = new Controller();
+
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
-        
         JFrame.setDefaultLookAndFeelDecorated(true);
-        JDialog.setDefaultLookAndFeelDecorated(true);
         SwingUtilities.invokeLater(new Runnable() {
-            @Override
             public void run() {
+                try {
+                    UIManager.setLookAndFeel(new GraphiteLookAndFeel());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("Substance Graphite failed to initialize");
+                }
                 home = new Home();
                 home.setVisible(true);
-               // BasicConfigurator.configure();
-
             }
         });
-        
-        
-        
-        
-//        insertVehicle();
-//        List<Vehicle> list = Connection.getInstance().getList("from Vehicle v");
-//        for (Vehicle vehicle : list) {
-//            System.out.println("vehicle = " + vehicle.getRegistrationNumber());
-//        }
-//        System.out.println(" \n\nCustomer : ");
-//        List<Customer> listc = Connection.getInstance().getList("from Customer");
-//        for (Customer customer : listc) {
-//            System.out.println("Customer ;"+customer.getName() +" "+customer.getLastName() );
-//        }
-        // TODO code application logic here
     }
 
     static void insertVehicle() {

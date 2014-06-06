@@ -158,7 +158,7 @@ public class Busqueda extends javax.swing.JDialog {
         String where = "";
         String filter = jTextField1.getText();
         where = jComboBox1.getSelectedItem().toString();
-        controller.btnBuscar(where, filter, PADRE, all);
+        //controller.btnBuscar(where, filter, PADRE, all);
         
         System.out.println(PADRE);
      
@@ -199,7 +199,7 @@ public class Busqueda extends javax.swing.JDialog {
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         int r = jTable1.getSelectedRow();
         System.out.println(jTable1.getValueAt(r, 0));
-        if(evt.getClickCount() >= 2 ){ controller.setBusqueda(PADRE,r); dispose();}
+       // if(evt.getClickCount() >= 2 ){ controller.setBusqueda(PADRE,r); dispose();}
        
     }//GEN-LAST:event_jTable1MouseClicked
 

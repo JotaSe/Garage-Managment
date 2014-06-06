@@ -1,4 +1,4 @@
- package com.ventanas.controller.utils;
+ package com.jotase.garage.util;
 
 import javax.swing.UIManager;
 import org.pushingpixels.substance.api.SubstanceConstants;
@@ -11,7 +11,7 @@ import org.pushingpixels.substance.api.watermark.SubstanceImageWatermark;
 import org.pushingpixels.substance.api.watermark.SubstanceWatermark;
  
 
- public class DefaultSkin  extends  GraphiteGlassSkin
+ public class DefaultSkin  extends  SubstanceBusinessBlueSteelLookAndFeel
  {
    SubstanceImageWatermark imageWatermark;
 
@@ -19,14 +19,14 @@ import org.pushingpixels.substance.api.watermark.SubstanceWatermark;
    public DefaultSkin()
    {
 
-        SubstanceLookAndFeel.setSkin(this);
+       // SubstanceLookAndFeel.setSkin(this);
        
      
    }
 
    public String getDisplayName()
    {
-     return "Ventanas Venezuela";
+     return "Garage Management";
    }
 
    public SubstanceImageWatermark getImageWatermark()
@@ -39,7 +39,7 @@ import org.pushingpixels.substance.api.watermark.SubstanceWatermark;
      this.imageWatermark = new SubstanceImageWatermark(s);
      this.imageWatermark.setOpacity(1F);
      this.imageWatermark.setKind(SubstanceConstants.ImageWatermarkKind.APP_ANCHOR);
-     this.watermark = (SubstanceWatermark)this.imageWatermark;
+     //this.watermark = (SubstanceWatermark)this.imageWatermark;
    }
 
    public void setTransparency(float f)

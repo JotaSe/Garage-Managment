@@ -1,5 +1,5 @@
 package com.jotase.garage.POJO;
-// Generated 04-jun-2014 0:28:18 by Hibernate Tools 3.2.1.GA
+// Generated 07-jun-2014 23:43:42 by Hibernate Tools 3.2.1.GA
 
 
 import java.util.Date;

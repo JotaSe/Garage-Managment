@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 07-jun-2014 23:43:43 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.jotase.garage.POJO.InterventionHasProducts" table="intervention_has_products" catalog="garage">
+        <composite-id name="id" class="com.jotase.garage.POJO.InterventionHasProductsId">
+            <key-property name="interventionId" type="int">
+                <column name="interventionId" />
+            </key-property>
+            <key-property name="productId" type="int">
+                <column name="productId" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="product" class="com.jotase.garage.POJO.Product" update="false" insert="false" fetch="select">
+            <column name="productId" not-null="true" unique="true" />
+        </many-to-one>
+        <many-to-one name="intervention" class="com.jotase.garage.POJO.Intervention" update="false" insert="false" fetch="select">
+            <column name="interventionId" not-null="true" unique="true" />
+        </many-to-one>
+        <property name="qty" type="java.lang.Double">
+            <column name="qty" precision="22" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

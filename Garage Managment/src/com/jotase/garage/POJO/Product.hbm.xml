@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 04-jun-2014 0:28:18 by Hibernate Tools 3.2.1.GA -->
+<!-- Generated 07-jun-2014 23:43:43 by Hibernate Tools 3.2.1.GA -->
 <hibernate-mapping>
     <class name="com.jotase.garage.POJO.Product" table="product" catalog="garage">
         <id name="idProduct" type="java.lang.Integer">
@@ -9,7 +9,7 @@
             <generator class="identity" />
         </id>
         <property name="name" type="string">
-            <column name="name" length="45" />
+            <column name="name" length="45" unique="true" />
         </property>
         <property name="cost" type="java.lang.Double">
             <column name="cost" precision="22" scale="0" />
@@ -29,13 +29,11 @@
         <property name="stock" type="java.lang.Double">
             <column name="stock" precision="22" scale="0" />
         </property>
-        <set name="interventions" inverse="false" table="intervention_has_products">
+        <set name="interventionHasProductses" inverse="true">
             <key>
                 <column name="productId" not-null="true" unique="true" />
             </key>
-            <many-to-many entity-name="com.jotase.garage.POJO.Intervention">
-                <column name="interventionId" not-null="true" unique="true" />
-            </many-to-many>
+            <one-to-many class="com.jotase.garage.POJO.InterventionHasProducts" />
         </set>
     </class>
 </hibernate-mapping>

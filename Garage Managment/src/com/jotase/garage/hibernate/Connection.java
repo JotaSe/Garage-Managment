@@ -4,6 +4,8 @@
  */
 package com.jotase.garage.hibernate;
 
+import com.jotase.garage.POJO.Intervention;
+import com.jotase.garage.POJO.InterventionHasProducts;
 import java.util.List;
 import javax.swing.JOptionPane;
 import org.hibernate.HibernateException;
@@ -24,6 +26,7 @@ public class Connection {
     private Transaction transaccion;
     private SessionFactory sessionFactory;
     private static Connection _instance;
+    boolean complete = false;
 
     /**
      * Singleton constructor
@@ -31,7 +34,10 @@ public class Connection {
     private Connection() {
         try {
             System.out.println("connecting");
-            sessionFactory =new AnnotationConfiguration().configure().buildSessionFactory();
+            sessionFactory = new AnnotationConfiguration()
+                    .addAnnotatedClass(InterventionHasProducts.class)
+                    .configure()
+                    .buildSessionFactory();
         } catch (HibernateException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
@@ -48,39 +54,65 @@ public class Connection {
     }
 
     private void end() {
-
+        complete = true;
         session.close();
     }
 
-    public void insert(Object object) {
+    private void error(HibernateException e) {
+        JOptionPane.showMessageDialog(null, "Error :" + e.getMessage());
+        System.out.println(e.getMessage());
+        transaccion.rollback();
+        complete = false;
+    }
+
+    public boolean insert(Object object) {
         begin();
         try {
             session.saveOrUpdate(object);
             transaccion.commit();
+
         } catch (HibernateException e) {
-            JOptionPane.showMessageDialog(null, "Error :"+e.getMessage());
-            System.out.println(e.getMessage());
-            transaccion.rollback();
+            error(e);
         } finally {
             JOptionPane.showMessageDialog(null, "Transaction complete");
+
             end();
         }
+        return complete;
+
+
+    }
+        public boolean update(Object object) {
+        begin();
+        try {
+            System.out.println("updating");
+            session.update(object);
+            transaccion.commit();
+
+        } catch (HibernateException e) {
+            error(e);
+        } finally {
+            JOptionPane.showMessageDialog(null, "Transaction complete");
+
+            end();
+        }
+        return complete;
 
 
     }
 
-    public void delete(Object object) {
+    public boolean delete(Object object) {
         begin();
         try {
             session.delete(object);
             transaccion.commit();
         } catch (HibernateException e) {
-            JOptionPane.showMessageDialog(null, "Error :"+e.getMessage());
-            transaccion.rollback();
+            error(e);
         } finally {
             JOptionPane.showMessageDialog(null, "Transaction complete");
             end();
         }
+        return complete;
     }
 
     public List getList(String _query) {
@@ -91,10 +123,9 @@ public class Connection {
             list = query.list();
             transaccion.commit();
         } catch (HibernateException e) {
-            JOptionPane.showMessageDialog(null, "Error :"+e.getMessage());
-            transaccion.rollback();
+            error(e);
         } finally {
-            JOptionPane.showMessageDialog(null, "Transaction complete");
+            //JOptionPane.showMessageDialog(null, "Transaction complete");
             end();
         }
         return list;
@@ -107,7 +138,7 @@ public class Connection {
             object = session.get(Object.class, _query);
             transaccion.commit();
         } catch (HibernateException e) {
-            JOptionPane.showMessageDialog(null, "Error :"+e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error :" + e.getMessage());
             transaccion.rollback();
         } finally {
             JOptionPane.showMessageDialog(null, "Transaction complete");

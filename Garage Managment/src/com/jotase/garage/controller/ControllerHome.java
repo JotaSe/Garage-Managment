@@ -33,22 +33,21 @@ public class ControllerHome {
                 //viewCustomer.setVisible(true);
                 break;
             case Intervention:
-                viewIntervention = new ViewIntervention();
-                viewIntervention.setVisible(true);
+                iframe = new ViewIntervention();
                 break;
             case Products:
-                viewProducts = new ViewProducts();
-                viewProducts.setVisible(true);
+                iframe = new ViewProducts();
                 break;
             case Vehicle:
-                viewVehicle = new ViewVehicle();
+                iframe = new ViewVehicle();
                 break;
 
 
         }
         setVisible(iframe);
     }
-    private void setVisible(JInternalFrame frame){
+
+    private void setVisible(JInternalFrame frame) {
         GarageManagment.home.getjDesktopPane1().add(frame);
         frame.show();
     }

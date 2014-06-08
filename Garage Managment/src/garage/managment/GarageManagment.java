@@ -8,16 +8,13 @@ import com.jotase.garage.POJO.Customer;
 import com.jotase.garage.POJO.Vehicle;
 import com.jotase.garage.hibernate.Connection;
 import com.jotase.garage.view.Home;
-import com.jtattoo.plaf.graphite.GraphiteLookAndFeel;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JDialog;
+import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
+import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
+//import com.jtattoo.plaf.graphite.GraphiteLookAndFeel;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import org.pushingpixels.substance.api.skin.SubstanceBusinessBlueSteelLookAndFeel;
+import org.pushingpixels.substance.api.skin.SubstanceAutumnLookAndFeel;
 
 /**
  *
@@ -39,11 +36,12 @@ public class GarageManagment {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    UIManager.setLookAndFeel(new GraphiteLookAndFeel());
+                    UIManager.setLookAndFeel(new WindowsLookAndFeel());
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println("Substance Graphite failed to initialize");
                 }
+                Connection.getInstance();
                 home = new Home();
                 home.setVisible(true);
             }

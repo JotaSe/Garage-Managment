@@ -7,11 +7,12 @@
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/garage?zeroDateTimeBehavior=convertToNull</property>
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.connection.password">1234</property>
-    <mapping class="com.jotase.garage.POJO.Invoice"/>
-    <mapping class="com.jotase.garage.POJO.Customer"/>
-    <mapping class="com.jotase.garage.POJO.Vehicle"/>
-    <mapping class="com.jotase.garage.POJO.Intervention"/>
-    <mapping class="com.jotase.garage.POJO.Product"/>
-    <mapping class="com.jotase.garage.POJO.Vehicletype"/>
+    <mapping resource="com/jotase/garage/POJO/Invoice.hbm.xml"/>
+    <mapping resource="com/jotase/garage/POJO/Vehicletype.hbm.xml"/>
+    <mapping resource="com/jotase/garage/POJO/Customer.hbm.xml"/>
+    <mapping resource="com/jotase/garage/POJO/InterventionHasProducts.hbm.xml"/>
+    <mapping resource="com/jotase/garage/POJO/Vehicle.hbm.xml"/>
+    <mapping resource="com/jotase/garage/POJO/Product.hbm.xml"/>
+    <mapping resource="com/jotase/garage/POJO/Intervention.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

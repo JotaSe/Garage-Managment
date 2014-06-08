@@ -25,6 +25,7 @@ public interface ControllerInterface <T>{
     public T get();
     public void clean();
     public void search();
+    public void setEditFirst();
     
     
 }

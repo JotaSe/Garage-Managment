@@ -1,5 +1,5 @@
 package com.jotase.garage.POJO;
-// Generated 04-jun-2014 0:28:18 by Hibernate Tools 3.2.1.GA
+// Generated 07-jun-2014 23:43:42 by Hibernate Tools 3.2.1.GA
 
 
 import java.util.HashSet;
@@ -25,13 +25,13 @@ public class Vehicletype  implements java.io.Serializable {
 
 
      private Integer id;
-     private Integer name;
+     private String name;
      private Set<Vehicle> vehicles = new HashSet<Vehicle>(0);
 
     public Vehicletype() {
     }
 
-    public Vehicletype(Integer name, Set<Vehicle> vehicles) {
+    public Vehicletype(String name, Set<Vehicle> vehicles) {
        this.name = name;
        this.vehicles = vehicles;
     }
@@ -47,12 +47,12 @@ public class Vehicletype  implements java.io.Serializable {
         this.id = id;
     }
     
-    @Column(name="name")
-    public Integer getName() {
+    @Column(name="name", length=50)
+    public String getName() {
         return this.name;
     }
     
-    public void setName(Integer name) {
+    public void setName(String name) {
         this.name = name;
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="vehicletype")

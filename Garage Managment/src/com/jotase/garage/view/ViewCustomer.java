@@ -294,7 +294,7 @@ public class ViewCustomer extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Customer customer = new Customer();
+        Customer customer = (controller.get()!=null) ? controller.get() : new Customer();
         customer.setName(jTextField1.getText());
         customer.setLastName(jTextField2.getText());
         customer.setIdNumber(jTextField3.getText());
@@ -317,10 +317,11 @@ public class ViewCustomer extends javax.swing.JInternalFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         controller.delete(controller.get());
+        controller.clean();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+        controller.search();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

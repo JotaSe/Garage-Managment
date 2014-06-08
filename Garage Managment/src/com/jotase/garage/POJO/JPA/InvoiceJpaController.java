@@ -16,7 +16,7 @@ import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author javierjose
+ * @author <@jota_Segovia>
  */
 public class InvoiceJpaController implements Serializable {
 

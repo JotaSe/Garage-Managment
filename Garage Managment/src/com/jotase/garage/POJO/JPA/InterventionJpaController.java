@@ -10,17 +10,19 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import com.jotase.garage.POJO.Vehicle;
 import com.jotase.garage.POJO.Invoice;
-import com.jotase.garage.POJO.JPA.exceptions.NonexistentEntityException;
 import java.util.HashSet;
 import java.util.Set;
-import com.jotase.garage.POJO.Product;
+import com.jotase.garage.POJO.InterventionHasProducts;
+import com.jotase.garage.POJO.JPA.exceptions.IllegalOrphanException;
+import com.jotase.garage.POJO.JPA.exceptions.NonexistentEntityException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author javierjose
+ * @author <@jota_Segovia>
  */
 public class InterventionJpaController implements Serializable {
 
@@ -37,8 +39,8 @@ public class InterventionJpaController implements Serializable {
         if (intervention.getInvoices() == null) {
             intervention.setInvoices(new HashSet<Invoice>());
         }
-        if (intervention.getProducts() == null) {
-            intervention.setProducts(new HashSet<Product>());
+        if (intervention.getInterventionHasProductses() == null) {
+            intervention.setInterventionHasProductses(new HashSet<InterventionHasProducts>());
         }
         EntityManager em = null;
         try {
@@ -55,12 +57,12 @@ public class InterventionJpaController implements Serializable {
                 attachedInvoices.add(invoicesInvoiceToAttach);
             }
             intervention.setInvoices(attachedInvoices);
-            Set<Product> attachedProducts = new HashSet<Product>();
-            for (Product productsProductToAttach : intervention.getProducts()) {
-                productsProductToAttach = em.getReference(productsProductToAttach.getClass(), productsProductToAttach.getIdProduct());
-                attachedProducts.add(productsProductToAttach);
+            Set<InterventionHasProducts> attachedInterventionHasProductses = new HashSet<InterventionHasProducts>();
+            for (InterventionHasProducts interventionHasProductsesInterventionHasProductsToAttach : intervention.getInterventionHasProductses()) {
+                interventionHasProductsesInterventionHasProductsToAttach = em.getReference(interventionHasProductsesInterventionHasProductsToAttach.getClass(), interventionHasProductsesInterventionHasProductsToAttach.getId());
+                attachedInterventionHasProductses.add(interventionHasProductsesInterventionHasProductsToAttach);
             }
-            intervention.setProducts(attachedProducts);
+            intervention.setInterventionHasProductses(attachedInterventionHasProductses);
             em.persist(intervention);
             if (vehicle != null) {
                 vehicle.getInterventions().add(intervention);
@@ -75,9 +77,14 @@ public class InterventionJpaController implements Serializable {
                     oldInterventionOfInvoicesInvoice = em.merge(oldInterventionOfInvoicesInvoice);
                 }
             }
-            for (Product productsProduct : intervention.getProducts()) {
-                productsProduct.getInterventions().add(intervention);
-                productsProduct = em.merge(productsProduct);
+            for (InterventionHasProducts interventionHasProductsesInterventionHasProducts : intervention.getInterventionHasProductses()) {
+                Intervention oldInterventionOfInterventionHasProductsesInterventionHasProducts = interventionHasProductsesInterventionHasProducts.getIntervention();
+                interventionHasProductsesInterventionHasProducts.setIntervention(intervention);
+                interventionHasProductsesInterventionHasProducts = em.merge(interventionHasProductsesInterventionHasProducts);
+                if (oldInterventionOfInterventionHasProductsesInterventionHasProducts != null) {
+                    oldInterventionOfInterventionHasProductsesInterventionHasProducts.getInterventionHasProductses().remove(interventionHasProductsesInterventionHasProducts);
+                    oldInterventionOfInterventionHasProductsesInterventionHasProducts = em.merge(oldInterventionOfInterventionHasProductsesInterventionHasProducts);
+                }
             }
             em.getTransaction().commit();
         } finally {
@@ -87,7 +94,7 @@ public class InterventionJpaController implements Serializable {
         }
     }
 
-    public void edit(Intervention intervention) throws NonexistentEntityException, Exception {
+    public void edit(Intervention intervention) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -97,8 +104,20 @@ public class InterventionJpaController implements Serializable {
             Vehicle vehicleNew = intervention.getVehicle();
             Set<Invoice> invoicesOld = persistentIntervention.getInvoices();
             Set<Invoice> invoicesNew = intervention.getInvoices();
-            Set<Product> productsOld = persistentIntervention.getProducts();
-            Set<Product> productsNew = intervention.getProducts();
+            Set<InterventionHasProducts> interventionHasProductsesOld = persistentIntervention.getInterventionHasProductses();
+            Set<InterventionHasProducts> interventionHasProductsesNew = intervention.getInterventionHasProductses();
+            List<String> illegalOrphanMessages = null;
+            for (InterventionHasProducts interventionHasProductsesOldInterventionHasProducts : interventionHasProductsesOld) {
+                if (!interventionHasProductsesNew.contains(interventionHasProductsesOldInterventionHasProducts)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain InterventionHasProducts " + interventionHasProductsesOldInterventionHasProducts + " since its intervention field is not nullable.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
             if (vehicleNew != null) {
                 vehicleNew = em.getReference(vehicleNew.getClass(), vehicleNew.getIdVehicle());
                 intervention.setVehicle(vehicleNew);
@@ -110,13 +129,13 @@ public class InterventionJpaController implements Serializable {
             }
             invoicesNew = attachedInvoicesNew;
             intervention.setInvoices(invoicesNew);
-            Set<Product> attachedProductsNew = new HashSet<Product>();
-            for (Product productsNewProductToAttach : productsNew) {
-                productsNewProductToAttach = em.getReference(productsNewProductToAttach.getClass(), productsNewProductToAttach.getIdProduct());
-                attachedProductsNew.add(productsNewProductToAttach);
+            Set<InterventionHasProducts> attachedInterventionHasProductsesNew = new HashSet<InterventionHasProducts>();
+            for (InterventionHasProducts interventionHasProductsesNewInterventionHasProductsToAttach : interventionHasProductsesNew) {
+                interventionHasProductsesNewInterventionHasProductsToAttach = em.getReference(interventionHasProductsesNewInterventionHasProductsToAttach.getClass(), interventionHasProductsesNewInterventionHasProductsToAttach.getId());
+                attachedInterventionHasProductsesNew.add(interventionHasProductsesNewInterventionHasProductsToAttach);
             }
-            productsNew = attachedProductsNew;
-            intervention.setProducts(productsNew);
+            interventionHasProductsesNew = attachedInterventionHasProductsesNew;
+            intervention.setInterventionHasProductses(interventionHasProductsesNew);
             intervention = em.merge(intervention);
             if (vehicleOld != null && !vehicleOld.equals(vehicleNew)) {
                 vehicleOld.getInterventions().remove(intervention);
@@ -143,16 +162,15 @@ public class InterventionJpaController implements Serializable {
                     }
                 }
             }
-            for (Product productsOldProduct : productsOld) {
-                if (!productsNew.contains(productsOldProduct)) {
-                    productsOldProduct.getInterventions().remove(intervention);
-                    productsOldProduct = em.merge(productsOldProduct);
-                }
-            }
-            for (Product productsNewProduct : productsNew) {
-                if (!productsOld.contains(productsNewProduct)) {
-                    productsNewProduct.getInterventions().add(intervention);
-                    productsNewProduct = em.merge(productsNewProduct);
+            for (InterventionHasProducts interventionHasProductsesNewInterventionHasProducts : interventionHasProductsesNew) {
+                if (!interventionHasProductsesOld.contains(interventionHasProductsesNewInterventionHasProducts)) {
+                    Intervention oldInterventionOfInterventionHasProductsesNewInterventionHasProducts = interventionHasProductsesNewInterventionHasProducts.getIntervention();
+                    interventionHasProductsesNewInterventionHasProducts.setIntervention(intervention);
+                    interventionHasProductsesNewInterventionHasProducts = em.merge(interventionHasProductsesNewInterventionHasProducts);
+                    if (oldInterventionOfInterventionHasProductsesNewInterventionHasProducts != null && !oldInterventionOfInterventionHasProductsesNewInterventionHasProducts.equals(intervention)) {
+                        oldInterventionOfInterventionHasProductsesNewInterventionHasProducts.getInterventionHasProductses().remove(interventionHasProductsesNewInterventionHasProducts);
+                        oldInterventionOfInterventionHasProductsesNewInterventionHasProducts = em.merge(oldInterventionOfInterventionHasProductsesNewInterventionHasProducts);
+                    }
                 }
             }
             em.getTransaction().commit();
@@ -172,7 +190,7 @@ public class InterventionJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -184,6 +202,17 @@ public class InterventionJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The intervention with id " + id + " no longer exists.", enfe);
             }
+            List<String> illegalOrphanMessages = null;
+            Set<InterventionHasProducts> interventionHasProductsesOrphanCheck = intervention.getInterventionHasProductses();
+            for (InterventionHasProducts interventionHasProductsesOrphanCheckInterventionHasProducts : interventionHasProductsesOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Intervention (" + intervention + ") cannot be destroyed since the InterventionHasProducts " + interventionHasProductsesOrphanCheckInterventionHasProducts + " in its interventionHasProductses field has a non-nullable intervention field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
             Vehicle vehicle = intervention.getVehicle();
             if (vehicle != null) {
                 vehicle.getInterventions().remove(intervention);
@@ -193,11 +222,6 @@ public class InterventionJpaController implements Serializable {
             for (Invoice invoicesInvoice : invoices) {
                 invoicesInvoice.setIntervention(null);
                 invoicesInvoice = em.merge(invoicesInvoice);
-            }
-            Set<Product> products = intervention.getProducts();
-            for (Product productsProduct : products) {
-                productsProduct.getInterventions().remove(intervention);
-                productsProduct = em.merge(productsProduct);
             }
             em.remove(intervention);
             em.getTransaction().commit();

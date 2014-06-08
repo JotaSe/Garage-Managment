@@ -14,9 +14,12 @@ import java.util.List;
 public class DAO<T> {
 
     Connection connection = Connection.getInstance();
-
-    public void update(T t) {
-        connection.insert(t);
+    
+    public boolean insert(T t){
+        return connection.insert(t);
+    }
+    public boolean update(T t) {
+        return connection.update(t);
     }
 
     public T get(T t, String query) {
@@ -24,8 +27,8 @@ public class DAO<T> {
         return (T) connection.get(t, query);
     }
 
-    public void delete(T t) {
-        connection.delete(t);
+    public boolean delete(T t) {
+        return connection.delete(t);
     }
 
     public List getList(String query) {

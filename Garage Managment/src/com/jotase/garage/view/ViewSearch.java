@@ -4,8 +4,8 @@
  */
 package com.jotase.garage.view;
 
+import com.jotase.garage.controller.Controller;
 import com.jotase.garage.controller.ControllerSearch;
-
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -14,25 +14,18 @@ import javax.swing.JTextField;
  *
  * @author Gaming
  */
-public class Busqueda extends javax.swing.JDialog {
-    private String PADRE = "";
+public class ViewSearch extends javax.swing.JDialog {
+
     public ControllerSearch controller;
 
-
-    public String getPADRE() {
-        return PADRE;
-    }
-
-    public void setPADRE(String PADRE) {
-        this.PADRE = PADRE;
-    }
     /**
      * Creates new form Busqueda
      */
-    public Busqueda(java.awt.Frame parent, boolean modal) {
+    public ViewSearch(java.awt.Frame parent, boolean modal, Controller control, String[] columns) {
         super(parent, modal);
         initComponents();
-        
+        controller = new ControllerSearch(control, columns, this);
+
     }
 
     /**
@@ -153,18 +146,17 @@ public class Busqueda extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        boolean all = true;
-        //int r = jTable1.getSelectedRow();
-        String where = "";
+
+
         String filter = jTextField1.getText();
-        where = jComboBox1.getSelectedItem().toString();
-        //controller.btnBuscar(where, filter, PADRE, all);
-        
-        System.out.println(PADRE);
-     
+
+        controller.search(filter);
+
+
     }//GEN-LAST:event_jButton3ActionPerformed
-    
+
     public JTable getjTable1() {
+
         return this.jTable1;
     }
 
@@ -176,16 +168,15 @@ public class Busqueda extends javax.swing.JDialog {
         this.jComboBox1 = jComboBox1;
     }
 
-    public  JTextField getjTextField1() {
+    public JTextField getjTextField1() {
         return jTextField1;
     }
 
-    public  void setjTextField1(JTextField jTextField1) {
+    public void setjTextField1(JTextField jTextField1) {
         this.jTextField1 = jTextField1;
     }
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
@@ -193,28 +184,28 @@ public class Busqueda extends javax.swing.JDialog {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
-
     }//GEN-LAST:event_jTextField1KeyTyped
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         int r = jTable1.getSelectedRow();
-        System.out.println(jTable1.getValueAt(r, 0));
-       // if(evt.getClickCount() >= 2 ){ controller.setBusqueda(PADRE,r); dispose();}
-       
+
+        if (evt.getClickCount() >= 2) {
+            controller.setValue(jTable1.getValueAt(r, 0));
+            if (controller.getValue() != null) {
+                dispose();
+            }
+        }
+
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jTable1CaretPositionChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jTable1CaretPositionChanged
-
     }//GEN-LAST:event_jTable1CaretPositionChanged
 
     private void jTable1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyReleased
-
     }//GEN-LAST:event_jTable1KeyReleased
-
     /**
      * @param args the command line arguments
      */
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JButton jButton3;
     private javax.swing.JComboBox jComboBox1;

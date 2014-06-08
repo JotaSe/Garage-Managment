@@ -1,5 +1,5 @@
 package com.jotase.garage.POJO;
-// Generated 04-jun-2014 0:28:18 by Hibernate Tools 3.2.1.GA
+// Generated 07-jun-2014 23:43:42 by Hibernate Tools 3.2.1.GA
 
 
 import java.util.HashSet;
@@ -11,9 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -23,6 +21,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name="product"
     ,catalog="garage"
+    , uniqueConstraints = @UniqueConstraint(columnNames="name") 
 )
 public class Product  implements java.io.Serializable {
 
@@ -35,12 +34,12 @@ public class Product  implements java.io.Serializable {
      private String description;
      private Boolean isService;
      private Double stock;
-     private Set<Intervention> interventions = new HashSet<Intervention>(0);
+     private Set<InterventionHasProducts> interventionHasProductses = new HashSet<InterventionHasProducts>(0);
 
     public Product() {
     }
 
-    public Product(String name, Double cost, Double vat, Double price, String description, Boolean isService, Double stock, Set<Intervention> interventions) {
+    public Product(String name, Double cost, Double vat, Double price, String description, Boolean isService, Double stock, Set<InterventionHasProducts> interventionHasProductses) {
        this.name = name;
        this.cost = cost;
        this.vat = vat;
@@ -48,7 +47,7 @@ public class Product  implements java.io.Serializable {
        this.description = description;
        this.isService = isService;
        this.stock = stock;
-       this.interventions = interventions;
+       this.interventionHasProductses = interventionHasProductses;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -62,7 +61,7 @@ public class Product  implements java.io.Serializable {
         this.idProduct = idProduct;
     }
     
-    @Column(name="name", length=45)
+    @Column(name="name", unique=true, length=45)
     public String getName() {
         return this.name;
     }
@@ -124,16 +123,13 @@ public class Product  implements java.io.Serializable {
     public void setStock(Double stock) {
         this.stock = stock;
     }
-@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-    @JoinTable(name="intervention_has_products", catalog="garage", uniqueConstraints={@UniqueConstraint(columnNames="interventionId"), @UniqueConstraint(columnNames="productId")}, joinColumns = { 
-        @JoinColumn(name="productId", unique=true, nullable=false, updatable=false) }, inverseJoinColumns = { 
-        @JoinColumn(name="interventionId", unique=true, nullable=false, updatable=false) })
-    public Set<Intervention> getInterventions() {
-        return this.interventions;
+@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="product")
+    public Set<InterventionHasProducts> getInterventionHasProductses() {
+        return this.interventionHasProductses;
     }
     
-    public void setInterventions(Set<Intervention> interventions) {
-        this.interventions = interventions;
+    public void setInterventionHasProductses(Set<InterventionHasProducts> interventionHasProductses) {
+        this.interventionHasProductses = interventionHasProductses;
     }
 
 

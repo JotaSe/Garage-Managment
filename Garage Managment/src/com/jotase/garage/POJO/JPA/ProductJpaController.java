@@ -7,18 +7,20 @@ package com.jotase.garage.POJO.JPA;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import com.jotase.garage.POJO.Intervention;
+import com.jotase.garage.POJO.InterventionHasProducts;
+import com.jotase.garage.POJO.JPA.exceptions.IllegalOrphanException;
 import com.jotase.garage.POJO.JPA.exceptions.NonexistentEntityException;
 import com.jotase.garage.POJO.Product;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author javierjose
+ * @author <@jota_Segovia>
  */
 public class ProductJpaController implements Serializable {
 
@@ -32,23 +34,28 @@ public class ProductJpaController implements Serializable {
     }
 
     public void create(Product product) {
-        if (product.getInterventions() == null) {
-            product.setInterventions(new HashSet<Intervention>());
+        if (product.getInterventionHasProductses() == null) {
+            product.setInterventionHasProductses(new HashSet<InterventionHasProducts>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Set<Intervention> attachedInterventions = new HashSet<Intervention>();
-            for (Intervention interventionsInterventionToAttach : product.getInterventions()) {
-                interventionsInterventionToAttach = em.getReference(interventionsInterventionToAttach.getClass(), interventionsInterventionToAttach.getId());
-                attachedInterventions.add(interventionsInterventionToAttach);
+            Set<InterventionHasProducts> attachedInterventionHasProductses = new HashSet<InterventionHasProducts>();
+            for (InterventionHasProducts interventionHasProductsesInterventionHasProductsToAttach : product.getInterventionHasProductses()) {
+                interventionHasProductsesInterventionHasProductsToAttach = em.getReference(interventionHasProductsesInterventionHasProductsToAttach.getClass(), interventionHasProductsesInterventionHasProductsToAttach.getId());
+                attachedInterventionHasProductses.add(interventionHasProductsesInterventionHasProductsToAttach);
             }
-            product.setInterventions(attachedInterventions);
+            product.setInterventionHasProductses(attachedInterventionHasProductses);
             em.persist(product);
-            for (Intervention interventionsIntervention : product.getInterventions()) {
-                interventionsIntervention.getProducts().add(product);
-                interventionsIntervention = em.merge(interventionsIntervention);
+            for (InterventionHasProducts interventionHasProductsesInterventionHasProducts : product.getInterventionHasProductses()) {
+                Product oldProductOfInterventionHasProductsesInterventionHasProducts = interventionHasProductsesInterventionHasProducts.getProduct();
+                interventionHasProductsesInterventionHasProducts.setProduct(product);
+                interventionHasProductsesInterventionHasProducts = em.merge(interventionHasProductsesInterventionHasProducts);
+                if (oldProductOfInterventionHasProductsesInterventionHasProducts != null) {
+                    oldProductOfInterventionHasProductsesInterventionHasProducts.getInterventionHasProductses().remove(interventionHasProductsesInterventionHasProducts);
+                    oldProductOfInterventionHasProductsesInterventionHasProducts = em.merge(oldProductOfInterventionHasProductsesInterventionHasProducts);
+                }
             }
             em.getTransaction().commit();
         } finally {
@@ -58,32 +65,43 @@ public class ProductJpaController implements Serializable {
         }
     }
 
-    public void edit(Product product) throws NonexistentEntityException, Exception {
+    public void edit(Product product) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             Product persistentProduct = em.find(Product.class, product.getIdProduct());
-            Set<Intervention> interventionsOld = persistentProduct.getInterventions();
-            Set<Intervention> interventionsNew = product.getInterventions();
-            Set<Intervention> attachedInterventionsNew = new HashSet<Intervention>();
-            for (Intervention interventionsNewInterventionToAttach : interventionsNew) {
-                interventionsNewInterventionToAttach = em.getReference(interventionsNewInterventionToAttach.getClass(), interventionsNewInterventionToAttach.getId());
-                attachedInterventionsNew.add(interventionsNewInterventionToAttach);
-            }
-            interventionsNew = attachedInterventionsNew;
-            product.setInterventions(interventionsNew);
-            product = em.merge(product);
-            for (Intervention interventionsOldIntervention : interventionsOld) {
-                if (!interventionsNew.contains(interventionsOldIntervention)) {
-                    interventionsOldIntervention.getProducts().remove(product);
-                    interventionsOldIntervention = em.merge(interventionsOldIntervention);
+            Set<InterventionHasProducts> interventionHasProductsesOld = persistentProduct.getInterventionHasProductses();
+            Set<InterventionHasProducts> interventionHasProductsesNew = product.getInterventionHasProductses();
+            List<String> illegalOrphanMessages = null;
+            for (InterventionHasProducts interventionHasProductsesOldInterventionHasProducts : interventionHasProductsesOld) {
+                if (!interventionHasProductsesNew.contains(interventionHasProductsesOldInterventionHasProducts)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain InterventionHasProducts " + interventionHasProductsesOldInterventionHasProducts + " since its product field is not nullable.");
                 }
             }
-            for (Intervention interventionsNewIntervention : interventionsNew) {
-                if (!interventionsOld.contains(interventionsNewIntervention)) {
-                    interventionsNewIntervention.getProducts().add(product);
-                    interventionsNewIntervention = em.merge(interventionsNewIntervention);
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            Set<InterventionHasProducts> attachedInterventionHasProductsesNew = new HashSet<InterventionHasProducts>();
+            for (InterventionHasProducts interventionHasProductsesNewInterventionHasProductsToAttach : interventionHasProductsesNew) {
+                interventionHasProductsesNewInterventionHasProductsToAttach = em.getReference(interventionHasProductsesNewInterventionHasProductsToAttach.getClass(), interventionHasProductsesNewInterventionHasProductsToAttach.getId());
+                attachedInterventionHasProductsesNew.add(interventionHasProductsesNewInterventionHasProductsToAttach);
+            }
+            interventionHasProductsesNew = attachedInterventionHasProductsesNew;
+            product.setInterventionHasProductses(interventionHasProductsesNew);
+            product = em.merge(product);
+            for (InterventionHasProducts interventionHasProductsesNewInterventionHasProducts : interventionHasProductsesNew) {
+                if (!interventionHasProductsesOld.contains(interventionHasProductsesNewInterventionHasProducts)) {
+                    Product oldProductOfInterventionHasProductsesNewInterventionHasProducts = interventionHasProductsesNewInterventionHasProducts.getProduct();
+                    interventionHasProductsesNewInterventionHasProducts.setProduct(product);
+                    interventionHasProductsesNewInterventionHasProducts = em.merge(interventionHasProductsesNewInterventionHasProducts);
+                    if (oldProductOfInterventionHasProductsesNewInterventionHasProducts != null && !oldProductOfInterventionHasProductsesNewInterventionHasProducts.equals(product)) {
+                        oldProductOfInterventionHasProductsesNewInterventionHasProducts.getInterventionHasProductses().remove(interventionHasProductsesNewInterventionHasProducts);
+                        oldProductOfInterventionHasProductsesNewInterventionHasProducts = em.merge(oldProductOfInterventionHasProductsesNewInterventionHasProducts);
+                    }
                 }
             }
             em.getTransaction().commit();
@@ -103,7 +121,7 @@ public class ProductJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -115,10 +133,16 @@ public class ProductJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The product with id " + id + " no longer exists.", enfe);
             }
-            Set<Intervention> interventions = product.getInterventions();
-            for (Intervention interventionsIntervention : interventions) {
-                interventionsIntervention.getProducts().remove(product);
-                interventionsIntervention = em.merge(interventionsIntervention);
+            List<String> illegalOrphanMessages = null;
+            Set<InterventionHasProducts> interventionHasProductsesOrphanCheck = product.getInterventionHasProductses();
+            for (InterventionHasProducts interventionHasProductsesOrphanCheckInterventionHasProducts : interventionHasProductsesOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Product (" + product + ") cannot be destroyed since the InterventionHasProducts " + interventionHasProductsesOrphanCheckInterventionHasProducts + " in its interventionHasProductses field has a non-nullable product field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(product);
             em.getTransaction().commit();

@@ -117,7 +117,7 @@ public class ControllerCustomer extends Controller implements ControllerInterfac
     @Override
     public void search() {
         String[] columns = {
-            "", "name", "idNumber", "email"
+            "", "name", "idNumber"
         };
         ViewSearch search = new ViewSearch(null, true, this, columns);
         search.setVisible(true);

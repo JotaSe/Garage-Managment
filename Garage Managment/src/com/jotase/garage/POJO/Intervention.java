@@ -1,5 +1,5 @@
 package com.jotase.garage.POJO;
-// Generated 07-jun-2014 23:43:42 by Hibernate Tools 3.2.1.GA
+// Generated 08-jun-2014 17:19:09 by Hibernate Tools 3.2.1.GA
 
 
 import java.util.Date;
@@ -34,7 +34,7 @@ public class Intervention  implements java.io.Serializable {
      private Date dateStart;
      private Date dateEnd;
      private String notes;
-     private Boolean isFinished;
+     private Boolean isFinished = false;
      private Set<Invoice> invoices = new HashSet<Invoice>(0);
      private Set<InterventionHasProducts> interventionHasProductses = new HashSet<InterventionHasProducts>(0);
 
@@ -61,7 +61,7 @@ public class Intervention  implements java.io.Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="vehicleID")
     public Vehicle getVehicle() {
         return this.vehicle;
@@ -106,7 +106,7 @@ public class Intervention  implements java.io.Serializable {
     public void setIsFinished(Boolean isFinished) {
         this.isFinished = isFinished;
     }
-@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="intervention")
+@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="intervention")
     public Set<Invoice> getInvoices() {
         return this.invoices;
     }
@@ -114,7 +114,7 @@ public class Intervention  implements java.io.Serializable {
     public void setInvoices(Set<Invoice> invoices) {
         this.invoices = invoices;
     }
-@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="intervention")
+@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="intervention")
     public Set<InterventionHasProducts> getInterventionHasProductses() {
         return this.interventionHasProductses;
     }

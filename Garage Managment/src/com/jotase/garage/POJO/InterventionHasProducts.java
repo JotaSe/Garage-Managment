@@ -1,5 +1,5 @@
 package com.jotase.garage.POJO;
-// Generated 07-jun-2014 23:43:42 by Hibernate Tools 3.2.1.GA
+// Generated 08-jun-2014 17:19:09 by Hibernate Tools 3.2.1.GA
 
 
 import javax.persistence.AttributeOverride;
@@ -57,7 +57,7 @@ public class InterventionHasProducts  implements java.io.Serializable {
     public void setId(InterventionHasProductsId id) {
         this.id = id;
     }
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="productId", unique=true, nullable=false, insertable=false, updatable=false)
     public Product getProduct() {
         return this.product;
@@ -66,7 +66,7 @@ public class InterventionHasProducts  implements java.io.Serializable {
     public void setProduct(Product product) {
         this.product = product;
     }
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="interventionId", unique=true, nullable=false, insertable=false, updatable=false)
     public Intervention getIntervention() {
         return this.intervention;

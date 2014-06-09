@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ventanas.controller.utils;
+package com.jotase.garage.util;
 import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.InputStream;

@@ -1,5 +1,5 @@
 package com.jotase.garage.POJO;
-// Generated 07-jun-2014 23:43:42 by Hibernate Tools 3.2.1.GA
+// Generated 08-jun-2014 17:19:09 by Hibernate Tools 3.2.1.GA
 
 
 import java.util.Date;
@@ -29,14 +29,18 @@ public class Invoice  implements java.io.Serializable {
      private Intervention intervention;
      private Date date;
      private String notes;
+     private Double subtotal;
+     private Double total;
 
     public Invoice() {
     }
 
-    public Invoice(Intervention intervention, Date date, String notes) {
+    public Invoice(Intervention intervention, Date date, String notes, Double subtotal, Double total) {
        this.intervention = intervention;
        this.date = date;
        this.notes = notes;
+       this.subtotal = subtotal;
+       this.total = total;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -49,7 +53,7 @@ public class Invoice  implements java.io.Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="interventionId")
     public Intervention getIntervention() {
         return this.intervention;
@@ -75,6 +79,24 @@ public class Invoice  implements java.io.Serializable {
     
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+    
+    @Column(name="subtotal", precision=22, scale=0)
+    public Double getSubtotal() {
+        return this.subtotal;
+    }
+    
+    public void setSubtotal(Double subtotal) {
+        this.subtotal = subtotal;
+    }
+    
+    @Column(name="total", precision=22, scale=0)
+    public Double getTotal() {
+        return this.total;
+    }
+    
+    public void setTotal(Double total) {
+        this.total = total;
     }
 
 

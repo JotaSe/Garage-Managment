@@ -22,17 +22,18 @@ import org.hibernate.classic.Session;
  */
 public class Connection {
 
-    private Session session;
+    public Session session;
     private Transaction transaccion;
     private SessionFactory sessionFactory;
     private static Connection _instance;
     boolean complete = false;
-
+    
     /**
      * Singleton constructor
      */
     private Connection() {
         try {
+            
             System.out.println("connecting");
             sessionFactory = new AnnotationConfiguration()
                     .addAnnotatedClass(InterventionHasProducts.class)
@@ -48,7 +49,7 @@ public class Connection {
     /**
      * @Method
      */
-    private void begin() {
+    public void begin() {
         session = sessionFactory.openSession();
         transaccion = session.beginTransaction();
     }
@@ -82,7 +83,8 @@ public class Connection {
 
 
     }
-        public boolean update(Object object) {
+
+    public boolean update(Object object) {
         begin();
         try {
             System.out.println("updating");
@@ -145,6 +147,26 @@ public class Connection {
             end();
         }
 
+        return object;
+    }
+
+    public Object get(String _query) {
+        begin();
+        Object object = null;
+
+        try {
+            Query query = session.createQuery(_query);
+            List<Object> list = query.list();
+            if (list.size() > 0) {
+                object = list.get(0);
+            }
+            transaccion.commit();
+        } catch (HibernateException e) {
+            error(e);
+        } finally {
+            //JOptionPane.showMessageDialog(null, "Transaction complete");
+            end();
+        }
         return object;
     }
 

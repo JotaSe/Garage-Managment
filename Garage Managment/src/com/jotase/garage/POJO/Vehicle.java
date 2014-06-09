@@ -1,5 +1,5 @@
 package com.jotase.garage.POJO;
-// Generated 07-jun-2014 23:43:42 by Hibernate Tools 3.2.1.GA
+// Generated 08-jun-2014 17:19:09 by Hibernate Tools 3.2.1.GA
 
 
 import java.util.Date;
@@ -69,7 +69,7 @@ public class Vehicle  implements java.io.Serializable {
     public void setIdVehicle(Integer idVehicle) {
         this.idVehicle = idVehicle;
     }
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="customerId")
     public Customer getCustomer() {
         return this.customer;
@@ -78,7 +78,7 @@ public class Vehicle  implements java.io.Serializable {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="typeId")
     public Vehicletype getVehicletype() {
         return this.vehicletype;
@@ -124,7 +124,7 @@ public class Vehicle  implements java.io.Serializable {
         this.kmTraveled = kmTraveled;
     }
     @Temporal(TemporalType.DATE)
-    @Column(name="constructionsYear", length=0)
+    @Column(name="constructionsYear", length=10)
     public Date getConstructionsYear() {
         return this.constructionsYear;
     }

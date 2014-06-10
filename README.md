@@ -1,4 +1,4 @@
 Garage-Managment
 ================
 
-Small project for garage managment
+Small project for garage managment using Hibernate
